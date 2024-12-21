@@ -2,4 +2,6 @@
 simulate planetary systems with ease
 
 # Statistiche
-![contributori](https://github.com/giobdev/gravity_simulator_x/graphs/contributors)
+<a href = "https://github.com/Tanu-N-Prabhu/Python/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo = GitHub_username/repository_name"/>
+</a>
