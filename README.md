@@ -1,2 +1,5 @@
 # gravity_simulator_x
 simulate planetary systems with ease
+
+# Statistiche
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra)](https://github.com/anuraghazra/github-readme-stats)
