@@ -1,9 +1,11 @@
-import turtle, random, sys
+'''
+ùimport turtle, random, sys
 from time_manager import TimeStep
 from bodies.planet import *
 from bodies.star import *
 from bodies.satellite import *
 from physics_manager import PhysicsManager
+import tkinter as tk
 
 class Main():
 	def __init__(self):
@@ -56,7 +58,9 @@ class Main():
 						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 20)]
 		self.physicsManager = PhysicsManager(self.bodies)
 
+
 	def mainLoop(self):
+		
 		while True:
 			self.win.update()
 			self.timeStep.nextStep()
@@ -66,8 +70,36 @@ class Main():
 				body.updateAll(self.timeStep.getStepTime(), self.timeStep.getTempo())
 				#timeStep.eachTime(0.1, body.drawTrail)
 				body.draw()
+	
+
+   
+
 
 if __name__ == "__main__":
 	app = Main()
 	app.restart()
 	app.mainLoop()
+'''
+
+import turtle
+from time_manager import TimeStep
+from physics_manager import PhysicsManager
+
+def start_simulation(bodies):
+    win = turtle.Screen()
+    win.title("Celestial Simulator X")
+    win.setup(1200, 800)
+    win.bgcolor("black")
+    win.tracer(0)
+
+    timeStep = TimeStep()
+    physicsManager = PhysicsManager(bodies)
+
+    while True:
+        win.update()
+        timeStep.nextStep()
+        physicsManager.applyAllForces()
+
+        for body in bodies:
+            body.updateAll(timeStep.getStepTime(), timeStep.getTempo())
+            body.draw()
