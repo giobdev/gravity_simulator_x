@@ -4,7 +4,7 @@ from bodies.planet import Planet
 from bodies.star import Star
 from bodies.satellite import Satellite
 from time_manager import TimeStep
-from run import start_simulation
+from run import Main
 import sys 
 
 #bg (background) = imposta il colore di sfondo di un widget, 
@@ -122,7 +122,10 @@ def set_simulation_speed(scale):
     #Maggiore è speed dato dall'utente, più velocemente procede la simulazione (step)
     time_step.step = 0.01 / speed
 
-
+def start_simulation():
+    app = Main(bodies)
+    app.restart()  # Inizializza la simulazione
+    app.mainLoop()
 
 
 
@@ -154,7 +157,7 @@ def create_gui():
     
     #Pulsante per avviare la simulazione, quindi i corpi si troveranno nelle posizioni e si muoveranno con le velocità scelte in input
     #Con command = lambda viene creata una funzione anonima che esegue run_simulation di run solo quando viene cliccato il pulsante Start
-    run_button = tk.Button(root, text="Start Simulation", command=lambda: start_simulation(bodies), font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
+    run_button = tk.Button(root, text="Start Simulation", command=lambda: start_simulation(), font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
     run_button.pack(pady=20)
     
     #Pulsante per chiudere l'applicazione solo una volta che la simulazione termina

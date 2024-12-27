@@ -1,5 +1,4 @@
-'''
-ùimport turtle, random, sys
+import turtle, random, sys
 from time_manager import TimeStep
 from bodies.planet import *
 from bodies.star import *
@@ -8,12 +7,42 @@ from physics_manager import PhysicsManager
 import tkinter as tk
 
 class Main():
-	def __init__(self):
+	def __init__(self, bodies = None):
 		self.win = turtle.Screen()
 		self.win.title("Gravity Simulator X")
 		self.win.setup(1200, 800)
 		self.lastSeed = random.randrange(sys.maxsize)
-	
+	    
+		#Se non ci sono corpi forniti da input, li genera casualmente
+		self.bodies = bodies if bodies is not None else self.generateRandomBodies()
+		
+		#Applicazione delle forze
+		self.physicsManager = PhysicsManager(self.bodies)
+    
+
+	#Funzione per generare corpi in modo casuale
+	def generateRandomBodies(self):
+
+		bodies = []
+		self.bodies = [Planet(random.uniform(0.5, 1.5),
+						      random.randint(-300, 300),
+							  random.randint(-300,300),
+							  random.randint(-2300, 2300),
+							  random.randint(-2300,2300)) for _ in range(15)]
+        
+		self.bodies += [Star(random.uniform(0.5, 1),
+					         random.randint(-300,300),
+							 random.randint(-300,300),
+								 0,0) for _ in range(1)]
+	    
+		self.bodies += [Satellite(random.uniform(0.5,1.5),
+							      random.randint(-300, 300),
+								  random.randint(-300,300),
+								  random.randint(-2300, 2300),
+								  random.randint(-2300,2300), 10**10) for _ in range(20)]
+		
+		return bodies
+
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
 
@@ -103,3 +132,4 @@ def start_simulation(bodies):
         for body in bodies:
             body.updateAll(timeStep.getStepTime(), timeStep.getTempo())
             body.draw()
+			'''
