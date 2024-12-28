@@ -40,3 +40,5 @@ class TimeStep:
 
 	def setTempo(self, tempo_string="1x"):
 		self.tempo = float(tempo_string[:tempo_string.index("x")])
+
+	
