@@ -4,7 +4,6 @@ from bodies.planet import *
 from bodies.star import *
 from bodies.satellite import *
 from physics_manager import PhysicsManager
-import tkinter as tk
 
 class Main():
 	def __init__(self, bodies = None):
@@ -18,31 +17,7 @@ class Main():
 		
 		#Applicazione delle forze
 		self.physicsManager = PhysicsManager(self.bodies)
-    
-
-	#Funzione per generare corpi in modo casuale
-	def generateRandomBodies(self):
-
-		bodies = []
-		self.bodies = [Planet(random.uniform(0.5, 1.5),
-						      random.randint(-300, 300),
-							  random.randint(-300,300),
-							  random.randint(-2300, 2300),
-							  random.randint(-2300,2300)) for _ in range(15)]
-        
-		self.bodies += [Star(random.uniform(0.5, 1),
-					         random.randint(-300,300),
-							 random.randint(-300,300),
-								 0,0) for _ in range(1)]
-	    
-		self.bodies += [Satellite(random.uniform(0.5,1.5),
-							      random.randint(-300, 300),
-								  random.randint(-300,300),
-								  random.randint(-2300, 2300),
-								  random.randint(-2300,2300), 10**10) for _ in range(20)]
-		
-		return bodies
-
+	
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
 
@@ -101,35 +76,9 @@ class Main():
 				body.draw()
 	
 
-   
 
 
 if __name__ == "__main__":
 	app = Main()
 	app.restart()
 	app.mainLoop()
-'''
-
-import turtle
-from time_manager import TimeStep
-from physics_manager import PhysicsManager
-
-def start_simulation(bodies):
-    win = turtle.Screen()
-    win.title("Celestial Simulator X")
-    win.setup(1200, 800)
-    win.bgcolor("black")
-    win.tracer(0)
-
-    timeStep = TimeStep()
-    physicsManager = PhysicsManager(bodies)
-
-    while True:
-        win.update()
-        timeStep.nextStep()
-        physicsManager.applyAllForces()
-
-        for body in bodies:
-            body.updateAll(timeStep.getStepTime(), timeStep.getTempo())
-            body.draw()
-			'''

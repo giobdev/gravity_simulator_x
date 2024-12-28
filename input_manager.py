@@ -6,6 +6,7 @@ from bodies.satellite import Satellite
 from time_manager import TimeStep
 from run import Main
 import sys 
+from runbis import start_simulation, set_simulation_speed, random
 
 #bg (background) = imposta il colore di sfondo di un widget, 
 #fg (foreground) = imposta il colore del testo del w,
@@ -112,23 +113,6 @@ def add_body_gui():
     add_button.grid(row=4, columnspan=4, pady=10)
 
 
-# Creazione di un'istanza di TimeStep, cioè viene creato un oggetto usando la classe TimeStep
-time_step = TimeStep() 
-
-#Funzione per impostare la velocità della simulazione
-def set_simulation_speed(scale):
-    speed = scale.get()
-    time_step.setTempo(f"{speed}x")
-    #Maggiore è speed dato dall'utente, più velocemente procede la simulazione (step)
-    time_step.step = 0.01 / speed
-
-def start_simulation():
-    app = Main(bodies)
-    app.restart()  # Inizializza la simulazione
-    app.mainLoop()
-
-
-
 #Funzione che gestisce l'intera interfaccia grafica della finestra principale 
 def create_gui():
     global root
@@ -156,15 +140,14 @@ def create_gui():
     set_button.grid(row=2, columnspan=2)
     
     #Pulsante per avviare la simulazione, quindi i corpi si troveranno nelle posizioni e si muoveranno con le velocità scelte in input
-    #Con command = lambda viene creata una funzione anonima che esegue run_simulation di run solo quando viene cliccato il pulsante Start
-    run_button = tk.Button(root, text="Start Simulation", command=lambda: start_simulation(), font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
+    #Con command = lambda viene creata una funzione anonima che esegue start_simulation di runbis solo quando viene cliccato il pulsante Start
+    run_button = tk.Button(root, text="Random", command=lambda: random(), font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
+    run_button.pack(pady=20)
+
+    run_button = tk.Button(root, text="Start Simulation", command=lambda: start_simulation(bodies), font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
     run_button.pack(pady=20)
     
-    #Pulsante per chiudere l'applicazione solo una volta che la simulazione termina
-    #run_button = tk.Button(root, text="Quit", command=sys.exit, font = ("Helvetica", 12), bg = "midnight blue", fg = "white")
-    
-    #Pulsante per chiudere l'app anche quando la simulazione è ancora in esecuzione
-    #run_button = tk.Button(root, text = "Quit", command = root.destroy, font = ("Helvetica",12), bg = "midnight blue", fg = "white")
+  
     run_button.pack(pady=20)
 
     root.mainloop()
