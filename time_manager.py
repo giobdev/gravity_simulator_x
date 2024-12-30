@@ -8,12 +8,13 @@ class TimeStep:
 		self.timer_flags = {}
 	
 	def nextStep(self):
-		time.sleep(self.step)
+		time.sleep(abs(self.step))
 		self.elapsed_time += self.step
 	
 	def fastForward(self): ...
 
-	def rewind(self): ...
+	def rewind(self):
+		self.step = -abs(self.step)
 
 	def getStepTime(self):
 		return self.step

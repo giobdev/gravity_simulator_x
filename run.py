@@ -18,7 +18,7 @@ class Main():
 	def restart(self, seed=None):
 		print("restart")
 		self.timeStep = TimeStep()
-		self.timeStep.setTempo("4x")
+		self.timeStep.setTempo("0.2x")
 		if seed is None:
 			seed = random.randrange(sys.maxsize)
 		else:
@@ -31,6 +31,7 @@ class Main():
 		self.win.tracer(0)
 		self.win.onkeypress(self.restart, "space")
 		self.win.onkeypress(self.restartWithLastSeed, "r")
+		self.win.onkeypress(self.timeStep.rewind, "b")
 		self.win.listen()
 		"""self.bodies = [Planet(1, -400, 0, 0, -2000), 
 				 Planet(1, 400, 0, 0, 2000), 
