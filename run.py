@@ -4,7 +4,9 @@ from bodies.planet import *
 from bodies.star import *
 from bodies.satellite import *
 from physics_manager import PhysicsManager
-
+import tkinter as tk
+from tkinter import messagebox
+import time 
 class Main():
 	def __init__(self, bodies = None):
 		self.win = turtle.Screen()
@@ -12,17 +14,12 @@ class Main():
 		self.win.setup(1200, 800)
 		self.lastSeed = random.randrange(sys.maxsize)
 	    
-		#Se non ci sono corpi forniti da input, li genera casualmente
-		self.bodies = bodies if bodies is not None else self.generateRandomBodies()
 		
-		#Applicazione delle forze
-		self.physicsManager = PhysicsManager(self.bodies)
 	
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
 
 	def restart(self, seed=None):
-		print("restart")
 		self.timeStep = TimeStep()
 		self.timeStep.setTempo("4x")
 		if seed is None:
@@ -38,6 +35,7 @@ class Main():
 		self.win.onkeypress(self.restart, "space")
 		self.win.onkeypress(self.restartWithLastSeed, "r")
 		self.win.listen()
+		
 		"""self.bodies = [Planet(1, -400, 0, 0, -2000), 
 				 Planet(1, 400, 0, 0, 2000), 
 				 Planet(1, 0, -400, 2000, 0), 
@@ -64,21 +62,68 @@ class Main():
 
 
 	def mainLoop(self):
-		
-		while True:
-			self.win.update()
-			self.timeStep.nextStep()
-			self.physicsManager.applyAllForces()
-			for body in self.bodies:
-				self.timeStep.eachTime(3, body.clear)
-				body.updateAll(self.timeStep.getStepTime(), self.timeStep.getTempo())
-				#timeStep.eachTime(0.1, body.drawTrail)
-				body.draw()
-	
+		try:
+			while True:
+				#RUNNING è una variabile interna di Turtle gestita dalla classe Screen
+				#indica se la finestra di Turtle è aperta o chiusa
+				if not turtle.Screen()._RUNNING:
+					break
+				self.win.update()
+				self.timeStep.nextStep()
+				self.physicsManager.applyAllForces()
+				for body in self.bodies:
+					self.timeStep.eachTime(3, body.clear)
+					body.updateAll(self.timeStep.getStepTime(), self.timeStep.getTempo())
+					#timeStep.eachTime(0.1, body.drawTrail)
+					body.draw()
+		except turtle.Terminator:
+			pass
+
+
+    
+
+
+# Variabile globale per monitorare lo stato della finestra Turtle
+window_active = False
+
+
+def start_random_simulation():
+  
+    global window_active
+
+    # Controlla se una finestra Turtle è già attiva
+    if window_active:
+        
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror("Simulation Running", "The simulation window is already active. Please close it to start a new one.")
+        root.destroy()
+        return
+
+    #Imposta la finestra come attiva
+    window_active = True
+
+    #Gestione della finestra Turtle
+    try:
+        app = Main()
+        app.restart()
+        app.mainLoop()
+
+    except turtle.Terminator:
+        pass
+    finally:
+        # Resetta lo stato della finestra
+		#print("Finestra chiusa")
+        window_active = False
+
+        #Ciclo che chiude la finestra Turtle per un nuovo avvio
+        try:
+            turtle.bye()
+        except turtle.Terminator:
+            pass
+            #print("Nessuna finestra da chiudere.")
 
 
 
-if __name__ == "__main__":
-	app = Main()
-	app.restart()
-	app.mainLoop()
+
+ 
