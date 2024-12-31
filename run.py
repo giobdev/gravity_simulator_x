@@ -10,6 +10,8 @@ from camera_manager import Camera
 #seed fighi
 #4487033921494198826
 #3686757135635109634
+#6796014375224988179
+#4467910743155316225 SUPER TOP
 class Main():
 	def __init__(self):
 		self.win = turtle.Screen()
@@ -30,8 +32,6 @@ class Main():
 				 Satellite(1, -589, 0, 0 , -1200),
 				 Satellite(0.6, -611, 8, 0 , -1200),
 				 Star(0.5, 0, 0, 0, 0)]
-		
-		return self.bodies[-1]
 	
 	def random_system_generator(self, n_planets: int = 6, n_stars: int = 2, n_satellites: int = 25):
 		# PLANETS
@@ -49,25 +49,23 @@ class Main():
 						self.rng.randint(-2300, 2300), 10**10) for _ in range(1, n_satellites)]
 		
 		# STARS
-		self.bodies +=[Star(self.rng.uniform(1.5, 3), 
+		self.bodies +=[Star(self.rng.uniform(0.3, 0.8), 
 						0, 
 						0, 
 						0,  
 						0) for _ in range(1, n_stars)]
-		
-		return self.bodies[-1]
 	
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
 
-	def restart(self, seed=None):
+	def restart(self, seed=4467910743155316225):
 		print("restart")
 		self.timeStep = TimeStep()
-		self.timeStep.setTempo("4x")
+		self.timeStep.setTempo("2x")
 		if seed is None:
 			seed = random.randrange(sys.maxsize)
 		else:
-			self.timeStep.setTempo("1x")
+			self.timeStep.setTempo("2x")
 		self.lastSeed = seed
 		self.rng = random.Random(seed)
 		print(seed)
@@ -80,43 +78,50 @@ class Main():
 		self.win.onkeypress(self.timeStep.rewind, "b")
 		self.win.listen()
 
-		star = self.showcase_system()
-		#star = self.random_system_generator()
+		self.showcase_system()
+		#self.random_system_generator()
 		
 		self.physicsManager = PhysicsManager(self.bodies, self.timeStep)
 		self.trajectory = Trajectory(self.bodies, self.timeStep)
 
-		self.camera = Camera(star)
+		self.camera = Camera()
 
+		for body in self.bodies:
+			body.draw()
+		
 		for body in self.trajectory.bodies:
 			body.draw()
 			body.drawTrajectory()
 
 	def mainLoop(self):
 		self.win.update()
+		TO_FOLLOW = -1
 
 		for _ in range(int(self.timeStep.getTempo())):
 			self.timeStep.nextStep()
-			self.camera.recenter(self.bodies)
+			self.camera.recenter(TO_FOLLOW, self.bodies)
 			self.physicsManager.applyAllForces()
 
 			for body in self.bodies:
-				body.updateAll(self.timeStep.getStepTime())
 				body.draw()
+				body.updateAll(self.timeStep.getStepTime())
 
 		for i in range(int(self.timeStep.getTempo() * 2)):
-			self.camera.recenter(self.trajectory.bodies)
+			self.camera.recenter(TO_FOLLOW, self.trajectory.bodies)
 			self.trajectory.physicsManager.applyAllForces()
 
 			for body in self.trajectory.bodies:
 				#self.timeStep.eachTime(2, body.clear)
-				body.updateAll(self.timeStep.getStepTime())
-				if i <= 1 and body.body_name != "star" and body.body_name != "satellite":
-					if self.timeStep.elapsed_time > 0.5:
-						if body.starting_x == round(body.x) or body.startint_y == round(body.y):
-							body.trajectory_completed = 1
-					if not body.trajectory_completed:
+				if i <= 1:
+					if body.body_name != "star" and body.body_name != "satellite":
 						body.drawTrajectory()
+						"""if self.timeStep.elapsed_time > 0.5:
+							if body.starting_x == round(body.x) and body.startint_y == round(body.y):
+								...
+								#body.trajectory_completed = 1"""
+						"""if not body.trajectory_completed:
+							body.drawTrajectory()"""
+				body.updateAll(self.timeStep.getStepTime())
 	
 		self.win.ontimer(self.mainLoop, 10)
 		#print(self.timeStep.elapsed_time)

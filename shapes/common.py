@@ -25,15 +25,11 @@ class Shape(turtle.Turtle):
 		self.penup()
 		self.goto(self.x, self.y)
 	
+	def goto_xy(self):
+		self.goto(self.x, self.y)
+	
 	def drawTrajectory(self):
 		self.hideturtle()
-		"""self.penup()
-		self.color(self.trajectory_color_name)
-		self.goto(self.x, self.y - self.radius)
-		self.pendown()
-		self.circle(self.trail_radius)
-		self.penup()
-		self.color(self.base_color_name)"""
 		self.color(self.trajectory_color_name)
 		self.pendown()
 		self.goto(self.x, self.y)
