@@ -76,6 +76,7 @@ class Main():
 		self.win.onkeypress(self.restart, "space")
 		self.win.onkeypress(self.restartWithLastSeed, "r")
 		self.win.onkeypress(self.timeStep.rewind, "b")
+		self.win.onkeypress(self.timeStep.forward, "f")
 		self.win.listen()
 
 		self.showcase_system()
@@ -121,7 +122,7 @@ class Main():
 								#body.trajectory_completed = 1"""
 						"""if not body.trajectory_completed:
 							body.drawTrajectory()"""
-				body.updateAll(self.timeStep.getStepTime())
+				body.updateAll(abs(self.timeStep.getStepTime()))
 	
 		self.win.ontimer(self.mainLoop, 10)
 		#print(self.timeStep.elapsed_time)

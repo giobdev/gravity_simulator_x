@@ -14,6 +14,9 @@ class TimeStep:
 
 	def rewind(self):
 		self.step = -abs(self.step)
+	
+	def forward(self):
+		self.step = abs(self.step)
 
 	def getStepTime(self):
 		return self.step
