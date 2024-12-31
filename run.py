@@ -6,7 +6,6 @@ from bodies.satellite import *
 from physics_manager import PhysicsManager
 from trajectory import Trajectory
 
-
 #seed fighi
 #4487033921494198826
 class Main():
@@ -17,6 +16,32 @@ class Main():
 		self.win.title("Gravity Simulator X")
 		self.win.setup(1200, 800)
 		self.lastSeed = random.randrange(sys.maxsize)
+	
+	def showcase_system(self):
+		self.bodies = [Planet(1, -400, 0, 0, -2000), 
+				 Planet(1, 400, 0, 0, 2000), 
+				 Planet(1, 0, -400, 2000, 0), 
+				 Planet(1, -0, 400, -2000, 0), 
+				 Star(0.5, 0, 0, 0, 0)]
+				 #Satellite(4, 390, 0, 0 , 1200),
+				 #Satellite(4, -380, -350, 380 , 800)]
+	
+	def random_system_generator(self, n_planets: int = 5, n_stars: int = 1, n_satellites: int = 5):
+		self.bodies = [Planet(self.rng.uniform(0.5, 1.5), 
+						self.rng.randint(-300, 300), 
+						self.rng.randint(-300, 300), 
+						self.rng.randint(-2300, 2300),  
+						self.rng.randint(-2300, 2300)) for _ in range(0, n_planets)] #range(0, 15)
+		self.bodies +=[Star(self.rng.uniform(1.5, 3), 
+						self.rng.randint(-300, 300), 
+						self.rng.randint(-300, 300), 
+						0,  
+						0) for _ in range(0, n_stars)]
+		"""self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
+						self.rng.randint(-300, 300), 
+						self.rng.randint(-300, 300), 
+						self.rng.randint(-2300, 2300),  
+						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 5)] #range(0, 25)"""
 	
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
@@ -39,30 +64,11 @@ class Main():
 		self.win.onkeypress(self.restartWithLastSeed, "r")
 		self.win.onkeypress(self.timeStep.rewind, "b")
 		self.win.listen()
-		"""self.bodies = [Planet(1, -400, 0, 0, -2000), 
-				 Planet(1, 400, 0, 0, 2000), 
-				 Planet(1, 0, -400, 2000, 0), 
-				 Planet(1, -0, 400, -2000, 0), 
-				 Star(0.5, 0, 0, 0, 0)]
-				 #Satellite(4, 390, 0, 0 , 1200),
-				 #Satellite(4, -380, -350, 380 , 800)]"""
 
-		self.bodies = [Planet(self.rng.uniform(0.5, 1.5), 
-						self.rng.randint(-300, 300), 
-						self.rng.randint(-300, 300), 
-						self.rng.randint(-2300, 2300),  
-						self.rng.randint(-2300, 2300)) for _ in range(0, 5)] #range(0, 15)
-		self.bodies +=[Star(self.rng.uniform(0.5, 1), 
-						self.rng.randint(-300, 300), 
-						self.rng.randint(-300, 300), 
-						0,  
-						0) for _ in range(0, 1)]
-		"""self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
-						self.rng.randint(-300, 300), 
-						self.rng.randint(-300, 300), 
-						self.rng.randint(-2300, 2300),  
-						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 5)] #range(0, 25)"""
+		self.showcase_system()
 
+		#self.random_system_generator()
+		
 		self.physicsManager = PhysicsManager(self.bodies, self.timeStep)
 		self.trajectory = Trajectory(self.bodies, self.timeStep)
 		for body in self.trajectory.bodies:
