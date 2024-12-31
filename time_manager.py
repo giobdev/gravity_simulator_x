@@ -31,7 +31,7 @@ class TimeStep:
 		name = callback.__name__ + str(id(callback.__self__))
 		if name not in self.timer_flags:
 			self.timer_flags[name] = 0
-		if round(self.getElapsedTime() % time, 2) == 0:
+		if round(self.getElapsedTime() % time, 1) == 0:
 			if self.timer_flags[name] == 1:
 				self.timer_flags[name] = 0
 				return callback()
