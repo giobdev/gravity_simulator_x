@@ -1,16 +1,21 @@
 import math
 
 class TimeStep:
-	def __init__(self, step=0.001, tempo=1.0):
+	def __init__(self, step: float = 0.001, tempo: int = 1):
 		self.step = step
 		self.elapsed_time = 0.0
-		self.tempo = tempo
+		self.base_tempo = tempo
+		self.tempo = self.base_tempo
 		self.timer_flags = {}
 	
 	def nextStep(self):
 		self.elapsed_time += self.step * self.tempo
 	
-	def fastForward(self): ...
+	def fastForward(self):
+		if self.tempo != self.base_tempo:
+			self.tempo = self.base_tempo
+		else:
+			self.tempo = 4 * self.base_tempo
 
 	def rewind(self):
 		self.step = -abs(self.step)
@@ -42,5 +47,5 @@ class TimeStep:
 			self.timer_flags[name] = 1
 
 	def setTempo(self, tempo_string="1x"):
-		self.tempo = int(tempo_string[:tempo_string.index("x")])
+		self.tempo = self.base_tempo = int(tempo_string[:tempo_string.index("x")])
 		print("tempo:", self.tempo)

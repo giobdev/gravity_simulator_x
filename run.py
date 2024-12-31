@@ -77,6 +77,7 @@ class Main():
 		self.win.onkeypress(self.restartWithLastSeed, "r")
 		self.win.onkeypress(self.timeStep.rewind, "b")
 		self.win.onkeypress(self.timeStep.forward, "f")
+		self.win.onkeypress(self.timeStep.fastForward, "h")
 		self.win.listen()
 
 		self.showcase_system()
