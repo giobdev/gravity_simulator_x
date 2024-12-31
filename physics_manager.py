@@ -1,8 +1,9 @@
 class PhysicsManager:
-	def __init__(self, bodies):
+	def __init__(self, bodies, timeStep):
 		self.distance_oom = 10 ** 8
 		self.mass_oom = 10 ** 11
 		self.bodies = bodies
+		self.timeStep = timeStep
 	
 	def addBody(self, body):
 		self.bodies.append(body)

@@ -1,15 +1,14 @@
-import time, math
+import math
 
 class TimeStep:
-	def __init__(self, step=0.01, tempo=1.0):
+	def __init__(self, step=0.001, tempo=1.0):
 		self.step = step
 		self.elapsed_time = 0.0
 		self.tempo = tempo
 		self.timer_flags = {}
 	
 	def nextStep(self):
-		time.sleep(abs(self.step))
-		self.elapsed_time += self.step
+		self.elapsed_time += self.step * self.tempo
 	
 	def fastForward(self): ...
 
@@ -32,7 +31,7 @@ class TimeStep:
 		name = callback.__name__ + str(id(callback.__self__))
 		if name not in self.timer_flags:
 			self.timer_flags[name] = 0
-		if round(self.getElapsedTime() % time, 1) == 0:
+		if round(self.getElapsedTime() % time, 2) == 0:
 			if self.timer_flags[name] == 1:
 				self.timer_flags[name] = 0
 				return callback()
@@ -40,4 +39,5 @@ class TimeStep:
 			self.timer_flags[name] = 1
 
 	def setTempo(self, tempo_string="1x"):
-		self.tempo = float(tempo_string[:tempo_string.index("x")])
+		self.tempo = int(tempo_string[:tempo_string.index("x")])
+		print("tempo:", self.tempo)

@@ -1,13 +1,19 @@
-import turtle, random, sys
+import turtle, random, sys, time
 from time_manager import TimeStep
 from bodies.planet import *
 from bodies.star import *
 from bodies.satellite import *
 from physics_manager import PhysicsManager
+from trajectory import Trajectory
 
+
+#seed fighi
+#4487033921494198826
 class Main():
 	def __init__(self):
 		self.win = turtle.Screen()
+		turtle.speed(speed="fastest")
+		self.win.tracer(0)
 		self.win.title("Gravity Simulator X")
 		self.win.setup(1200, 800)
 		self.lastSeed = random.randrange(sys.maxsize)
@@ -18,11 +24,11 @@ class Main():
 	def restart(self, seed=None):
 		print("restart")
 		self.timeStep = TimeStep()
-		self.timeStep.setTempo("0.2x")
+		self.timeStep.setTempo("4x")
 		if seed is None:
 			seed = random.randrange(sys.maxsize)
 		else:
-			self.timeStep.setTempo("0.2x")
+			self.timeStep.setTempo("1x")
 		self.lastSeed = seed
 		self.rng = random.Random(seed)
 		print(seed)
@@ -37,36 +43,52 @@ class Main():
 				 Planet(1, 400, 0, 0, 2000), 
 				 Planet(1, 0, -400, 2000, 0), 
 				 Planet(1, -0, 400, -2000, 0), 
-				 Star(0.5, 0, 0, 0, 0), 
-				 Satellite(4, 390, 0, 0 , 1200),
-				 Satellite(4, -380, -350, 380 , 800)]"""
+				 Star(0.5, 0, 0, 0, 0)]
+				 #Satellite(4, 390, 0, 0 , 1200),
+				 #Satellite(4, -380, -350, 380 , 800)]"""
+
 		self.bodies = [Planet(self.rng.uniform(0.5, 1.5), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-2300, 2300),  
-						self.rng.randint(-2300, 2300)) for _ in range(0, 15)]
+						self.rng.randint(-2300, 2300)) for _ in range(0, 5)] #range(0, 15)
 		self.bodies +=[Star(self.rng.uniform(0.5, 1), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-300, 300), 
 						0,  
 						0) for _ in range(0, 1)]
-		self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
+		"""self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-2300, 2300),  
-						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 20)]
-		self.physicsManager = PhysicsManager(self.bodies)
+						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 5)] #range(0, 25)"""
+
+		self.physicsManager = PhysicsManager(self.bodies, self.timeStep)
+		self.trajectory = Trajectory(self.bodies, self.timeStep)
+		for body in self.trajectory.bodies:
+			body.draw()
 
 	def mainLoop(self):
 		while True:
 			self.win.update()
-			self.timeStep.nextStep()
-			self.physicsManager.applyAllForces()
-			for body in self.bodies:
-				self.timeStep.eachTime(3, body.clear)
-				body.updateAll(self.timeStep.getStepTime(), self.timeStep.getTempo())
-				#timeStep.eachTime(0.1, body.drawTrail)
-				body.draw()
+
+			for _ in range(int(self.timeStep.getTempo())):
+				self.timeStep.nextStep()
+				self.physicsManager.applyAllForces()
+
+				for body in self.bodies:
+					body.updateAll(self.timeStep.getStepTime())
+					body.draw()
+
+			for i in range(int(self.timeStep.getTempo() * 2)):
+				self.trajectory.physicsManager.applyAllForces()
+
+				for body in self.trajectory.bodies:
+					body.updateAll(self.timeStep.getStepTime())
+					if i <= 1:
+						body.drawTrajectory()
+		
+			time.sleep(0.01)
 
 if __name__ == "__main__":
 	app = Main()
