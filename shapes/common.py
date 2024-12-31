@@ -1,4 +1,4 @@
-import turtle
+import turtle, random
 
 class Shape(turtle.Turtle):
 	def __init__(self, starting_x, starting_y, radius=3):
@@ -10,10 +10,12 @@ class Shape(turtle.Turtle):
 		self.startint_y = starting_y
 		self.x = starting_x
 		self.y = starting_y
-		self.base_color_name = "blue"
-		self.trajectory_color_name = "gray10"
+		self.possible_colors = ["magenta", "maroon", "pink", "beige", "aquamarine", "brown", "misty rose", "cyan", "deep pink"]
+		self.base_color_name = random.choice(self.possible_colors)
+		self.trajectory_color_name = "gray" + str(random.randint(3, 20))
 		self.color(self.base_color_name)
 		self.shapesize(self.radius, self.radius)
+		self.trajectory_completed = 0
 	
 	def setRadius(self, radius):
 		self.radius = radius

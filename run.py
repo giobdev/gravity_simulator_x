@@ -22,17 +22,18 @@ class Main():
 		self.lastSeed = random.randrange(sys.maxsize)
 	
 	def showcase_system(self):
-		self.bodies = [Planet(1, -400, 0, 0, -2000), 
-				 Planet(1, 400, 0, 0, 2000), 
-				 Planet(1, 0, -400, 2000, 0), 
-				 Planet(1, -0, 400, -2000, 0),
-				 #Satellite(4, 390, 0, 0 , 1200),
-				 #Satellite(4, -380, -350, 380 , 800),
+		self.bodies = [Planet(1, -600, 0, 0, -2000), 
+				 Planet(1, 600, 0, 0, 2000), 
+				 Planet(1, 0, -600, 2000, 0), 
+				 Planet(1, -0, 600, -2000, 0),
+				 Satellite(1, 589, 0, 0 , 1200),
+				 Satellite(1, -589, 0, 0 , -1200),
+				 Satellite(0.6, -611, 8, 0 , -1200),
 				 Star(0.5, 0, 0, 0, 0)]
 		
 		return self.bodies[-1]
 	
-	def random_system_generator(self, n_planets: int = 5, n_stars: int = 2, n_satellites: int = 5):
+	def random_system_generator(self, n_planets: int = 6, n_stars: int = 2, n_satellites: int = 25):
 		# PLANETS
 		self.bodies = [Planet(self.rng.uniform(0.5, 1.5), 
 						self.rng.randint(-300, 300), 
@@ -41,11 +42,11 @@ class Main():
 						self.rng.randint(-2300, 2300)) for _ in range(1, n_planets)]
 
 		# SATELLITES
-		"""self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
+		self.bodies +=[Satellite(self.rng.uniform(0.5, 1.5), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-2300, 2300),  
-						self.rng.randint(-2300, 2300), 10**10) for _ in range(1, 5)]"""
+						self.rng.randint(-2300, 2300), 10**10) for _ in range(1, n_satellites)]
 		
 		# STARS
 		self.bodies +=[Star(self.rng.uniform(1.5, 3), 
@@ -59,7 +60,7 @@ class Main():
 	def restartWithLastSeed(self):
 		self.restart(self.lastSeed)
 
-	def restart(self, seed=3686757135635109634):
+	def restart(self, seed=None):
 		print("restart")
 		self.timeStep = TimeStep()
 		self.timeStep.setTempo("4x")
@@ -79,8 +80,8 @@ class Main():
 		self.win.onkeypress(self.timeStep.rewind, "b")
 		self.win.listen()
 
-		#self.showcase_system()
-		star = self.random_system_generator()
+		star = self.showcase_system()
+		#star = self.random_system_generator()
 		
 		self.physicsManager = PhysicsManager(self.bodies, self.timeStep)
 		self.trajectory = Trajectory(self.bodies, self.timeStep)
@@ -108,10 +109,14 @@ class Main():
 			self.trajectory.physicsManager.applyAllForces()
 
 			for body in self.trajectory.bodies:
-				self.timeStep.eachTime(2, body.clear)
+				#self.timeStep.eachTime(2, body.clear)
 				body.updateAll(self.timeStep.getStepTime())
-				if i <= 1 and body.body_name != "star":
-					body.drawTrajectory()
+				if i <= 1 and body.body_name != "star" and body.body_name != "satellite":
+					if self.timeStep.elapsed_time > 0.5:
+						if body.starting_x == round(body.x) or body.startint_y == round(body.y):
+							body.trajectory_completed = 1
+					if not body.trajectory_completed:
+						body.drawTrajectory()
 	
 		self.win.ontimer(self.mainLoop, 10)
 		#print(self.timeStep.elapsed_time)
