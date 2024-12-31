@@ -14,8 +14,10 @@ class PhysicsManager:
 	def applyAllForces(self):
 		for body in self.bodies:
 			for other_body in [b for b in self.bodies if b != body]:
+
 				force_x, force_y = body.applyForceOut(
 					other_body.mass, 
 					other_body.x, 
 					other_body.y, self.mass_oom, self.distance_oom)
+				
 				other_body.applyForceIn(force_x, force_y, self.mass_oom)

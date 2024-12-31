@@ -9,7 +9,7 @@ class TimeStep:
 		self.timer_flags = {}
 	
 	def nextStep(self):
-		self.elapsed_time += self.step * self.tempo
+		self.elapsed_time += self.step
 	
 	def fastForward(self):
 		if self.tempo != self.base_tempo:
@@ -24,6 +24,9 @@ class TimeStep:
 		self.step = abs(self.step)
 
 	def getStepTime(self):
+		return self.step
+	
+	def getAbsStepTime(self):
 		return self.step
 
 	def getTempo(self):

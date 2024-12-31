@@ -113,20 +113,13 @@ class Main():
 			self.trajectory.physicsManager.applyAllForces()
 
 			for body in self.trajectory.bodies:
-				#self.timeStep.eachTime(2, body.clear)
 				if i <= 1:
 					if body.body_name != "star" and body.body_name != "satellite":
-						body.drawTrajectory()
-						"""if self.timeStep.elapsed_time > 0.5:
-							if body.starting_x == round(body.x) and body.startint_y == round(body.y):
-								...
-								#body.trajectory_completed = 1"""
-						"""if not body.trajectory_completed:
-							body.drawTrajectory()"""
-				body.updateAll(abs(self.timeStep.getStepTime()))
+						if self.timeStep.elapsed_time < 0.58:
+							body.drawTrajectory()
+				body.updateAll(self.timeStep.getAbsStepTime())
 	
 		self.win.ontimer(self.mainLoop, 10)
-		#print(self.timeStep.elapsed_time)
 
 if __name__ == "__main__":
 	app = Main()
