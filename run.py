@@ -6,6 +6,7 @@ from bodies.satellite import *
 from physics_manager import PhysicsManager
 from trajectory import Trajectory
 from camera_manager import Camera
+from database import *
 
 #seed fighi
 #4487033921494198826
@@ -86,6 +87,13 @@ class Main():
 		self.physicsManager = PhysicsManager(self.bodies, self.timeStep)
 		self.trajectory = Trajectory(self.bodies, self.timeStep)
 
+		#salva il try nel db
+		try_id = insert_try(seed)
+		if try_id:
+			for body in self.bodies:
+				if isinstance(body, Planet):  #solo i pianite vengono registrati
+					insert_planet(try_id, body)
+
 		self.camera = Camera()
 
 		for body in self.bodies:
@@ -123,6 +131,7 @@ class Main():
 
 if __name__ == "__main__":
 	app = Main()
+	connect_to_database()  # Connessione al database
 	app.restart()
 	app.mainLoop()
 	app.win.mainloop()
