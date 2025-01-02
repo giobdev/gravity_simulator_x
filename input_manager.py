@@ -172,21 +172,21 @@ def manual_input_window():
 	canvas.grid(row=0, column=0, padx=10)
 	
 	#Bottone ovale start
-	start_button = canvas.create_oval(10, 10, 60, 60, fill="green", outline="white")#x1 = 10, y1 = 10 (angolo superiore sinistro).
-	canvas.create_text(35, 35, text="Start", font=("Helvetica", 10), fill="white")
+	start_button = canvas.create_oval(69, 10, 119, 60, fill="green", outline="white")#x1 = 10, y1 = 10 (angolo superiore sinistro).
+	canvas.create_text(94, 35, text="Start", font=("Helvetica", 10), fill="white")
 
 	#L'area cliccabile sarà un rettangolo invisibile, in modo che posso cliccare su ogni punto della superficie del pulsante ovale
 	#per far partire la simulazione
 	#outline = vuoto (nessun contorno), fill = vuoto (nessun colore di riempimento)
-	start_area_invisibile = canvas.create_rectangle(10,10,60,60, outline="", fill="") #10,10 = coordinate superiori sinistra
+	start_area_invisibile = canvas.create_rectangle(69,10,119,60, outline="", fill="") #10,10 = coordinate superiori sinistra
 	
 	#Metodo di canvas che porta il  rettangolo sopra tutti gli altri elementi
 	canvas.tag_raise(start_area_invisibile)
 
 	#Bottone ovale reset
-	reset_button = canvas.create_oval(70, 10, 120, 60, fill="red", outline="white")
-	canvas.create_text(95,35, text ="Reset", font=("Helvetica",10), fill = "white")
-	reset_area_invisibile = canvas.create_rectangle(70,10,120,60, fill="", outline="")
+	reset_button = canvas.create_oval(129, 10, 179, 60, fill="red", outline="white")
+	canvas.create_text(154,35, text ="Reset", font=("Helvetica",10), fill = "white")
+	reset_area_invisibile = canvas.create_rectangle(129,10,179,60, fill="", outline="")
 	canvas.tag_raise(reset_area_invisibile)
 
 
