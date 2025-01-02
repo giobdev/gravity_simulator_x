@@ -2,6 +2,7 @@
 *.py[cod]
 
 .venv/ 
+.env/
 .vscode/
 build/
 dist/

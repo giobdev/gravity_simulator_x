@@ -6,14 +6,15 @@ from bodies.satellite import *
 from physics_manager import PhysicsManager
 import tkinter as tk
 from tkinter import messagebox
-import time 
+
+
 class Main():
 	def __init__(self, bodies = None):
 		self.win = turtle.Screen()
 		self.win.title("Gravity Simulator X")
 		self.win.setup(1200, 800)
 		self.lastSeed = random.randrange(sys.maxsize)
-	    
+		
 		
 	
 	def restartWithLastSeed(self):
@@ -66,6 +67,8 @@ class Main():
 			while True:
 				#RUNNING è una variabile interna di Turtle gestita dalla classe Screen
 				#indica se la finestra di Turtle è aperta o chiusa
+
+				#Se la finestra è chiusa, esci dal ciclo while
 				if not turtle.Screen()._RUNNING:
 					break
 				self.win.update()
@@ -80,7 +83,7 @@ class Main():
 			pass
 
 
-    
+	
 
 
 # Variabile globale per monitorare lo stato della finestra Turtle
@@ -89,39 +92,40 @@ window_active = False
 
 def start_random_simulation():
   
-    global window_active
+	global window_active
 
-    # Controlla se una finestra Turtle è già attiva
-    if window_active:
-        
-        root = tk.Tk()
-        root.withdraw()
-        messagebox.showerror("Simulation Running", "The simulation window is already active. Please close it to start a new one.")
-        root.destroy()
-        return
+	#Ciclo che controlla se una finestra Turtle è già attiva
+	if window_active:
+		
+		root = tk.Tk()
+		root.withdraw()
+		messagebox.showerror("Simulation Running", "The simulation window is already active. Please close it to start a new one.")
+		root.destroy()
+		return
 
-    #Imposta la finestra come attiva
-    window_active = True
+	#Imposta la finestra come attiva
+	window_active = True
 
-    #Gestione della finestra Turtle
-    try:
-        app = Main()
-        app.restart()
-        app.mainLoop()
+	#Gestione della finestra Turtle
+	try:
+		app = Main()
+		app.restart()
+		app.mainLoop()
 
-    except turtle.Terminator:
-        pass
-    finally:
-        # Resetta lo stato della finestra
+	except turtle.Terminator:
+		pass
+	#Finally viene sempre eseguito, indipendentemente dal fatto che si verifichino errori
+	finally:
+		#Resetta lo stato della finestra, consentendo l'avvio di una nuova simulazione casuale (diversa dalla precedente)
 		#print("Finestra chiusa")
-        window_active = False
+		window_active = False
 
-        #Ciclo che chiude la finestra Turtle per un nuovo avvio
-        try:
-            turtle.bye()
-        except turtle.Terminator:
-            pass
-            #print("Nessuna finestra da chiudere.")
+		#Ciclo che chiude la finestra Turtle per un nuovo avvio
+		try:
+			turtle.bye()
+		except turtle.Terminator:
+			pass
+			#print("Nessuna finestra da chiudere.")
 
 
 

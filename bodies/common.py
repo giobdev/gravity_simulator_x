@@ -2,7 +2,7 @@ import math
 from scipy.constants import G
 
 from shapes.common import Shape
-
+ 
 class Body(Shape):
 	def __init__(self, mass, starting_x, starting_y, starting_speed_x=0.0, starting_speed_y=0.0):
 		super().__init__(starting_x, starting_y)
@@ -44,3 +44,9 @@ class Body(Shape):
 
 	def updateAll(self, delta_t, time_speed=1.0):
 		self.updatePosition(delta_t * time_speed)
+		
+
+
+
+	
+	
