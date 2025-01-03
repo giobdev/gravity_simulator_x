@@ -37,6 +37,8 @@ class Main():
 		self.win.onkeypress(self.restartWithLastSeed, "r")
 		self.win.listen()
 		
+		
+
 		"""self.bodies = [Planet(1, -400, 0, 0, -2000), 
 				 Planet(1, 400, 0, 0, 2000), 
 				 Planet(1, 0, -400, 2000, 0), 
@@ -59,6 +61,9 @@ class Main():
 						self.rng.randint(-300, 300), 
 						self.rng.randint(-2300, 2300),  
 						self.rng.randint(-2300, 2300), 10**10) for _ in range(0, 20)]
+		
+
+
 		self.physicsManager = PhysicsManager(self.bodies)
 
 

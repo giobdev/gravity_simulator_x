@@ -19,14 +19,14 @@ import turtle
 bodies = []
 
 #Variabile globale per la simulazione corrente
-simulation = None
+#simulation = None
 
 
 def create_gui():
 
-	print("Avvio interfaccia grafica...")
+	#print("Avvio interfaccia grafica...")
+	#global simulation
 	def start_manual_simulation():
-		global simulation
 		#Chiudi la finestra principale e passa alla finestra di inserimento corpi
 		root.quit()
 		root.destroy()
@@ -60,6 +60,12 @@ def create_gui():
 
 #Funzione per la finestra di inserimento manuale dei corpi
 def manual_input_window():
+
+	def close_manual_window():
+		#DistruggE la finestra corrente
+		root.destroy()
+		#Riapre la finestra principale
+		create_gui()
 
 	def add_body_gui():
 		global bodies
@@ -159,6 +165,9 @@ def manual_input_window():
 	root = tk.Tk()
 	root.title("Insert Bodies Manually")
 	root.config(bg='black')
+
+	# Chiama la funzione close_manual_window quando l'utente chiude la finestra manualmente
+	root.protocol("WM_DELETE_WINDOW", close_manual_window)
 
 	root.geometry("600x400")
 	root.resizable(False, False)
