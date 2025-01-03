@@ -10,3 +10,5 @@ dist/
 *.log
 *.exe
 *.spec
+
+venv2
