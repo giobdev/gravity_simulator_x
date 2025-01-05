@@ -6,7 +6,9 @@ from bodies.satellite import *
 from physics_manager import PhysicsManager
 from trajectory import Trajectory
 from camera_manager import Camera
-from database import *
+import tkinter as tk
+from tkinter import messagebox
+#from database import *
 
 #seed fighi
 #4487033921494198826
@@ -88,11 +90,11 @@ class Main():
 		self.trajectory = Trajectory(self.bodies, self.timeStep)
 
 		#salva il try nel db
-		try_id = insert_try(seed)
-		if try_id:
-			for body in self.bodies:
-				if isinstance(body, Planet):  #solo i pianite vengono registrati
-					insert_planet(try_id, body)
+		#try_id = insert_try(seed)
+		#if try_id:
+		#	for body in self.bodies:
+		#		if isinstance(body, Planet):  #solo i pianite vengono registrati
+		#			insert_planet(try_id, body)
 
 		self.camera = Camera()
 
@@ -113,7 +115,11 @@ class Main():
 			self.physicsManager.applyAllForces()
 
 			for body in self.bodies:
-				body.draw()
+				try:
+					body.draw()
+				except:
+					pass
+
 				body.updateAll(self.timeStep.getStepTime())
 
 		for i in range(int(self.timeStep.getTempo() * 2)):
@@ -127,11 +133,55 @@ class Main():
 							body.drawTrajectory()
 				body.updateAll(self.timeStep.getAbsStepTime())
 	
-		self.win.ontimer(self.mainLoop, 10)
+		if window_active: self.win.ontimer(self.mainLoop, 10) 
 
-if __name__ == "__main__":
-	app = Main()
-	connect_to_database()  # Connessione al database
-	app.restart()
-	app.mainLoop()
-	app.win.mainloop()
+window_active = False
+
+
+def start_random_simulation():
+  
+	global window_active
+
+	#Ciclo che controlla se una finestra Turtle è già attiva
+	if window_active:
+		
+		root = tk.Tk()
+		root.withdraw()
+		messagebox.showerror("Simulation Running", "The simulation window is already active. Please close it to start a new one.")
+		root.destroy()
+		return
+
+	#Imposta la finestra come attiva
+	window_active = True
+
+	#Gestione della finestra Turtle
+	try:
+		app = Main()
+		#connect_to_database()
+		app.restart()
+		app.mainLoop()
+		app.win.mainloop()
+
+	except turtle.Terminator:
+		pass
+	#Finally viene sempre eseguito, indipendentemente dal fatto che si verifichino errori
+	finally:
+		#Resetta lo stato della finestra, consentendo l'avvio di una nuova simulazione casuale (diversa dalla precedente)
+		#print("Finestra chiusa")
+		window_active = False
+		
+		
+		try:
+			turtle.bye()
+		except turtle.Terminator:
+			pass
+		#print("Nessuna finestra da chiudere.")
+
+
+#if __name__ == "__main__":
+#	app = Main()
+#	connect_to_database()  # Connessione al database
+#	app.restart()
+#	app.mainLoop()
+
+#	app.win.mainloop()
