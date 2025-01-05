@@ -9,3 +9,5 @@ dist/
 *.log
 *.exe
 *.spec
+
+mvenv/
